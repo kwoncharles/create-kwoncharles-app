@@ -1,0 +1,44 @@
+{
+  "name": "create-kwoncharles-app",
+  "description": "Create React app with \"create-next-app\" + \"kwoncharles' custom configuration.\"",
+  "author": "kwoncharles <hello.kwon.charles@gmail.com>",
+  "license": "MIT",
+  "version": "1.0.0-canary.0",
+  "keywords": [
+    "react",
+    "next",
+    "next.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kwoncharles/create-kwoncharles-app"
+  },
+  "bin": {
+    "create-kwoncharles-app": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prebuild": "rimraf ./dist/",
+    "postbuild": "cp -R templates dist",
+    "build-body": "ncc build ./src/index.ts -o ./dist/ --minify --no-cache --no-source-map-register",
+    "build": "yarn prebuild && yarn build-body && yarn postbuild"
+  },
+  "devDependencies": {
+    "@types/cross-spawn": "^6.0.2",
+    "@types/node": "^14.14.37",
+    "@types/prompts": "2.0.9",
+    "@types/rimraf": "^3.0.0",
+    "@types/validate-npm-package-name": "3.0.2",
+    "@vercel/ncc": "~0.27.0",
+    "chalk": "^4.1.0",
+    "commander": "7.2.0",
+    "cpy": "^8.1.2",
+    "cross-spawn": "7.0.3",
+    "prompts": "2.4.0",
+    "rimraf": "^3.0.2",
+    "typescript": "4.2.3",
+    "validate-npm-package-name": "3.0.0"
+  }
+}
