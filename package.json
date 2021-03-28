@@ -23,7 +23,8 @@
     "prebuild": "rimraf ./dist/",
     "postbuild": "cp -R templates dist",
     "build-body": "ncc build ./src/index.ts -o ./dist/ --minify --no-cache --no-source-map-register",
-    "build": "yarn prebuild && yarn build-body && yarn postbuild"
+    "build": "yarn prebuild && yarn build-body && yarn postbuild",
+    "publish": "npm publish"
   },
   "devDependencies": {
     "@types/cross-spawn": "^6.0.2",
