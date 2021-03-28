@@ -58,6 +58,7 @@ export async function createApp({
     version: '0.1.0',
     private: true,
     scripts: { dev: 'next dev', build: 'next build', start: 'next start' },
+    engines: { node: '>=10.13.0' },
   };
 
   fs.writeFileSync(
