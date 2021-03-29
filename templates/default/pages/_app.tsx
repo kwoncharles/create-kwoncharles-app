@@ -1,4 +1,4 @@
-import '../styles/globals.css';
+import '@/screen/shared/styles/global.css';
 
 function MyApp({ Component, pageProps }) {
   return <Component {...pageProps} />;

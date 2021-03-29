@@ -18,10 +18,12 @@ export async function createApp({
   appPath,
   useNpm,
   useEslint,
+  useTailwind,
 }: {
   appPath: string;
   useNpm: boolean;
   useEslint?: boolean;
+  useTailwind?: boolean;
 }): Promise<void> {
   const root = path.resolve(appPath);
 
@@ -89,38 +91,18 @@ export async function createApp({
 
   let devDeps = ['@babel/core', '@types/react', '@types/react-dom', '@types/node','typescript'];
 
-  if (useEslint) {
-    const lintRelatedDeps = [
-      '@typescript-eslint/eslint-plugin',
-      '@typescript-eslint/parser',
-      'eslint',
-      'eslint-config-airbnb-typescript',
-      'eslint-plugin-import',
-      'eslint-plugin-jsx-a11y',
-      'eslint-plugin-react',
-      'eslint-plugin-react-hooks',
-      'husky@4.3.8',
+  if (useTailwind) {
+    devDeps = [
+      ...devDeps,
+      ...tailwindRelatedDeps,
     ];
+  }
 
+  if (useEslint) {
     devDeps = [
       ...devDeps,
       ...lintRelatedDeps,
-    ]
-
-    await cpy('.eslintrc.template.js', root, {
-      parents: true,
-      cwd: path.join(__dirname, 'templates'),
-      rename(name) {
-        switch (name) {
-          case '.eslintrc.template.js': {
-            return '.eslintrc.js';
-          }
-          default: {
-            return name;
-          }
-        }
-      },
-    });
+    ];
   }
 
   logInstallingDeps(useNpm ? 'npm' : 'yarn', ...devDeps);
@@ -131,6 +113,8 @@ export async function createApp({
   );
 
   console.log();
+  
+  // 기본 탬플릿 copy
   await cpy('**', root, {
     parents: true,
     cwd: path.join(__dirname, 'templates', 'default'),
@@ -151,6 +135,50 @@ export async function createApp({
       }
     },
   });
+
+  // eslint 관련 탬플릿 copy
+  if (useEslint) {
+    await cpy('.eslintrc.template.js', root, {
+      parents: true,
+      cwd: path.join(__dirname, 'templates'),
+      rename(name) {
+        switch (name) {
+          case '.eslintrc.template.js': {
+            return '.eslintrc.js';
+          }
+          default: {
+            return name;
+          }
+        }
+      },
+    });
+  }
+
+  // tailwind 관련 탬플릿 copy
+  if (useTailwind) {
+    await cpy('**', root, {
+      parents: true,
+      cwd: path.join(__dirname, 'templates', 'tailwindcss', 'config'),
+      rename(name) {
+        switch (name) {
+          case 'tailwind.config.template.js': {
+            return 'tailwind.config.js';
+          }
+          case 'postcss.config.template.js': {
+            return 'postcss.config.js';
+          }
+          default: {
+            return name;
+          }
+        }
+      },
+    });
+
+    await cpy('global.css', path.join(root, 'src', 'screen', 'shared', 'styles'), {
+      parents: true,
+      cwd: path.join(__dirname, 'templates', 'tailwindcss'),
+    });
+  }
 
   if (tryGitInit(root)) {
     console.log(
@@ -192,3 +220,25 @@ export async function createApp({
     '\n',
   );
 }
+
+
+const tailwindRelatedDeps = [
+  'autoprefixer',
+  'postcss',
+  'postcss-custom-properties',
+  'postcss-flexbugs-fixes',
+  'postcss-nested',
+  'tailwindcss',
+];
+
+const lintRelatedDeps = [
+  '@typescript-eslint/eslint-plugin',
+  '@typescript-eslint/parser',
+  'eslint',
+  'eslint-config-airbnb-typescript',
+  'eslint-plugin-import',
+  'eslint-plugin-jsx-a11y',
+  'eslint-plugin-react',
+  'eslint-plugin-react-hooks',
+  'husky@4.3.8',
+];

@@ -18,12 +18,16 @@ const program = new Commander.Command(packageJson.name)
   })
   .option('--use-npm', 'use npm instead of yarn.')
   .option('--eslint', 'use eslint')
+  .option('--tw --tailwind', 'use tailwindcss')
   .allowUnknownOption()
   .parse(process.argv);
 
-
 async function run(): Promise<void> {
-  const { useNpm, eslint: useEslint } = program.opts();
+  const {
+    useNpm,
+    eslint: useEslint,
+    tailwind: useTailwind,
+  } = program.opts();
 
   if (typeof projectPath === 'string') {
     projectPath = projectPath.trim()
@@ -71,6 +75,7 @@ async function run(): Promise<void> {
     await createApp({
       useNpm,
       useEslint,
+      useTailwind,
       appPath: resolvedProjectPath,
     })
   } catch (reason) {
