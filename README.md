@@ -12,9 +12,10 @@
 
 - `eslint` (option)
 
+- `tailwindcss` (option)
+
 - `prettier` (option, 추가예정)
 
-- `tailwindcss` (option, 추가예정)
 
 ## Table of Contents
 
@@ -27,7 +28,7 @@
 - [LICENSE](#license)
 
 ## Usage
-사용법은 `create-react-app`과 동일합니다.
+사용법은 [`create-react-app`](https://github.com/facebook/create-react-app)과 동일합니다.
 ```
 npx create-kwoncharles-app <directory-name>
 ```
@@ -40,9 +41,11 @@ npx create-kwoncharles-app <directory-name>
 
 - **--eslint** - `eslint` 설정을 추가합니다.
 
+- **--tw --tailwind** - [`tailwindcss`](https://tailwindcss.com/) 설정을 추가합니다.
+
 ## Inspiration
 
-`kcd-scripts`에서 영감을 받고, `create-next-app`의 코드를 (많이) 참고하였습니다.
+[`kcd-scripts`](https://github.com/kentcdodds/kcd-scripts)에서 영감을 받고, [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app)의 코드를 (많이) 참고하였습니다.
 
 ## Issues
 
