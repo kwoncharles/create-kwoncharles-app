@@ -10,6 +10,9 @@ import { makeDir } from './helper/make-dir';
 import { shouldUseYarn } from './helper/should-use-yarn';
 import { install } from './helper/install';
 import { tryGitInit } from './helper/git';
+import { logInstallingDeps } from './helper/logger';
+
+const LINT_CMD = 'lint' as const;
 
 export async function createApp({
   appPath,
@@ -53,7 +56,7 @@ export async function createApp({
   await makeDir(root);
   process.chdir(root);
 
-  const packageJson = {
+  const packageJson: any = {
     name: appName,
     version: '0.1.0',
     private: true,
@@ -61,67 +64,49 @@ export async function createApp({
     engines: { node: '>=10.13.0' },
   };
 
+  if (useEslint) {
+    packageJson.scripts[LINT_CMD] = 'eslint . --ext .js,.jsx,.ts,.tsx';
+    packageJson.husky = {
+      hooks: {
+        'pre-commit': `${useNpm ? 'npm run' : 'yarn'} ${LINT_CMD}`,
+      }
+    }
+  }
+
   fs.writeFileSync(
     path.join(root, 'package.json'),
     JSON.stringify(packageJson, null, 2) + os.EOL,
   );
 
-  console.log(
-    `Installing ${chalk.cyan('react')}, ${chalk.cyan(
-      'react-dom'
-    )}, and ${chalk.cyan('next')} using ${displayedCommand}...`,
-    '\n',
-  );
+  const deps = ['react', 'react-dom', 'next'];
+  logInstallingDeps(useNpm ? 'npm' : 'yarn', ...deps);
 
   await install(
     root,
-    ['react', 'react-dom', 'next'],
+    deps,
     { useYarn, isOnline },
   );
 
-
-  console.log(
-    '\n',
-    `Installing ${chalk.cyan(
-      '@babel/core',
-    )}, ${chalk.cyan(
-      '@types/react'
-    )}, ${chalk.cyan(
-      '@types/react-dom'
-    )}, ${chalk.cyan(
-      '@types/node'
-    )}, and ${chalk.cyan('typescript')} using ${displayedCommand}...`,
-    '\n',
-  );
-  await install(
-    root,
-    ['@babel/core', '@types/react', '@types/react-dom', '@types/node','typescript'],
-    { useYarn, isOnline, isDevDeps: true },
-  );
+  let devDeps = ['@babel/core', '@types/react', '@types/react-dom', '@types/node','typescript'];
 
   if (useEslint) {
-    console.log(
-      '\n',
-      `Installing ${chalk.cyan(
-        'eslint',
-      )} with ${chalk.cyanBright('its plugins')}`,
-      `using ${displayedCommand}...`,
-      '\n',
-    );
-    await install(
-      root,
-      [
-        '@typescript-eslint/eslint-plugin',
-        '@typescript-eslint/parser',
-        'eslint',
-        'eslint-config-airbnb-typescript',
-        'eslint-plugin-import',
-        'eslint-plugin-jsx-a11y',
-        'eslint-plugin-react',
-        'eslint-plugin-react-hooks',
-      ],
-      { useYarn, isOnline, isDevDeps: true },
-    );
+    const lintRelatedDeps = [
+      '@typescript-eslint/eslint-plugin',
+      '@typescript-eslint/parser',
+      'eslint',
+      'eslint-config-airbnb-typescript',
+      'eslint-plugin-import',
+      'eslint-plugin-jsx-a11y',
+      'eslint-plugin-react',
+      'eslint-plugin-react-hooks',
+      'husky@4.3.8',
+    ];
+
+    devDeps = [
+      ...devDeps,
+      ...lintRelatedDeps,
+    ]
+
     await cpy('.eslintrc.template.js', root, {
       parents: true,
       cwd: path.join(__dirname, 'templates'),
@@ -137,6 +122,13 @@ export async function createApp({
       },
     });
   }
+
+  logInstallingDeps(useNpm ? 'npm' : 'yarn', ...devDeps);
+  await install(
+    root,
+    devDeps,
+    { useYarn, isOnline, isDevDeps: true },
+  );
 
   console.log();
   await cpy('**', root, {

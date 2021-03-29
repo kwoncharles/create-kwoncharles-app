@@ -24,7 +24,5 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'prefer-arrow-callback': 'off',
     'no-plusplus': 'off',
-
-    '@typescript-eslint/no-use-before-define': 'off',
   }
 }
