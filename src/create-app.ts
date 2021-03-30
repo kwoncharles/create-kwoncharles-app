@@ -81,7 +81,7 @@ export async function createApp({
   );
 
   const deps = ['react', 'react-dom', 'next'];
-  logInstallingDeps(useNpm ? 'npm' : 'yarn', ...deps);
+  logInstallingDeps(displayedCommand, ...deps);
 
   await install(
     root,
@@ -105,7 +105,7 @@ export async function createApp({
     ];
   }
 
-  logInstallingDeps(useNpm ? 'npm' : 'yarn', ...devDeps);
+  logInstallingDeps(displayedCommand, ...devDeps);
   await install(
     root,
     devDeps,
