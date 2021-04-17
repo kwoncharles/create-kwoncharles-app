@@ -10,6 +10,18 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+/* Remove number arrow key */
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  /* Chrome, Safari, Edge, Opera */
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;
