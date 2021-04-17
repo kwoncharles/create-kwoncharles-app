@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import { validateNpmName } from './helper/validate-pkg';
 import packageJson from '../package.json';
 import { createApp } from './create-app';
+import { confirmEslintPropmpts, confirmTailwindPropmpts } from './helper/prompts-utils';
 
 let projectPath: string = '';
 
@@ -23,7 +24,7 @@ const program = new Commander.Command(packageJson.name)
   .parse(process.argv);
 
 async function run(): Promise<void> {
-  const {
+  let {
     useNpm,
     eslint: useEslint,
     tailwind: useTailwind,
@@ -52,6 +53,17 @@ async function run(): Promise<void> {
     if (typeof res.path === 'string') {
       projectPath = res.path.trim();
     }
+  }
+
+  if (!useEslint || !useTailwind) {
+    const confirmPrompts: prompts.PromptObject[] = [];
+    !useTailwind && confirmPrompts.push(confirmTailwindPropmpts);
+    !useEslint && confirmPrompts.push(confirmEslintPropmpts);
+
+    const { confirmUseTailwind, confirmUseEslint } = await prompts(confirmPrompts);
+
+    useTailwind = useTailwind || confirmUseTailwind;
+    useEslint = useEslint || confirmUseEslint;
   }
 
   const resolvedProjectPath = path.resolve(projectPath);
