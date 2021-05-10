@@ -3,7 +3,7 @@
   "description": "Create React app with \"create-next-app\" + \"kwoncharles' custom configuration.\"",
   "author": "kwoncharles <hello.kwon.charles@gmail.com>",
   "license": "MIT",
-  "version": "1.0.0-canary.7",
+  "version": "1.0.0-canary.8",
   "keywords": [
     "react",
     "next",
