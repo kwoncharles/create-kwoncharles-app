@@ -70,9 +70,14 @@ export async function createApp({
     packageJson.scripts[LINT_CMD] = 'eslint . --ext .js,.jsx,.ts,.tsx';
     packageJson.husky = {
       hooks: {
-        'pre-commit': `${useNpm ? 'npm run' : 'yarn'} ${LINT_CMD}`,
+        'pre-commit': 'lint-staged',
       }
-    }
+    };
+    packageJson['lint-staged'] = {
+      '*.{ts,tsx}': [
+        'eslint',
+      ],
+    };
   }
 
   fs.writeFileSync(
@@ -241,4 +246,5 @@ const lintRelatedDeps = [
   'eslint-plugin-react',
   'eslint-plugin-react-hooks',
   'husky@4.3.8',
+  'lint-staged',
 ];
