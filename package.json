@@ -21,9 +21,8 @@
   ],
   "scripts": {
     "prebuild": "rimraf ./dist/",
+    "build": "ncc build ./src/index.ts -o ./dist/ --minify --no-cache --no-source-map-register",
     "postbuild": "cp -R templates dist",
-    "build-body": "ncc build ./src/index.ts -o ./dist/ --minify --no-cache --no-source-map-register",
-    "build": "yarn prebuild && yarn build-body && yarn postbuild",
     "publish": "npm publish"
   },
   "devDependencies": {
