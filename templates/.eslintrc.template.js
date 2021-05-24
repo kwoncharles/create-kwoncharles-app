@@ -6,6 +6,7 @@ module.exports = {
     /* 이하 Typescript */
     'airbnb-typescript',
     'plugin:import/typescript',
+    'plugin:react-hooks/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
   ],
@@ -46,6 +47,7 @@ module.exports = {
     '.eslintrc.js',
     'tailwind.config.js',
     'postcss.config.js',
+    'stylelint.config.js',
   ],
   rules: {
     /**

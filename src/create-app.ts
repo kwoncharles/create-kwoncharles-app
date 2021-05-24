@@ -166,12 +166,12 @@ export async function createApp({
       cwd: path.join(__dirname, 'templates', 'tailwindcss', 'config'),
       rename(name) {
         switch (name) {
-          case 'tailwind.config.template.js': {
+          case 'tailwind.config.template.js':
             return 'tailwind.config.js';
-          }
-          case 'postcss.config.template.js': {
+          case 'postcss.config.template.js':
             return 'postcss.config.js';
-          }
+          case 'stylelint.config.template.js':
+            return 'stylelint.config.js';
           default: {
             return name;
           }
@@ -234,6 +234,8 @@ const tailwindRelatedDeps = [
   'postcss-flexbugs-fixes',
   'postcss-nested',
   'tailwindcss',
+  'stylelint',
+  'stylelint-config-standard',
 ];
 
 const lintRelatedDeps = [
