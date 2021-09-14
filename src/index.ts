@@ -12,8 +12,8 @@ let projectPath: string = '';
 
 const program = new Commander.Command(packageJson.name)
   .version(packageJson.version)
-  .arguments('<project-directory>')
-  .usage(`${chalk.green('<project-directory>')} [options]`)
+  .arguments('[project-directory]')
+  .usage(`${chalk.green('[project-directory]')} [options]`)
   .action((name) => {
     projectPath = name;
   })
